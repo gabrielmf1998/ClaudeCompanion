@@ -16,6 +16,10 @@ Claude becomes your in game guide and servant. It sees where you are, what you c
 | 1.20.1 | NeoForge 47.1.x | same Forge jar |
 | 1.20.1 | Fabric (needs Fabric API) | `claudecompanion-fabric-1.20.1-<version>.jar` |
 | 1.20.1 | Quilt (needs QFAPI) | same Fabric jar |
+| 1.21.1 | Forge 52.x | `claudecompanion-forge-1.21.1-<version>.jar` |
+| 1.21.1 | NeoForge 21.1.x | `claudecompanion-neoforge-1.21.1-<version>.jar` |
+| 1.21.1 | Fabric (needs Fabric API) | `claudecompanion-fabric-1.21.1-<version>.jar` |
+| 1.21.1 | Quilt (needs Fabric API) | same Fabric jar |
 
 Download the jars from the [GitHub releases](https://github.com/gabrielmf1998/ClaudeCompanion/releases) or the [GitLab releases](https://gitlab.com/gabriel17166/ClaudeCompanion/releases).
 
@@ -37,9 +41,9 @@ Every message you send to Claude uses your own Claude plan or API credits, the s
 
 ## Install
 
-1. Install the loader for Minecraft 1.20.1 (Forge, NeoForge, Fabric or Quilt).
-2. Fabric needs [Fabric API](https://modrinth.com/mod/fabric-api). Quilt needs [QFAPI](https://modrinth.com/mod/qsl).
-3. Put the matching jar in your `mods` folder.
+1. Install the loader for Minecraft 1.20.1 or 1.21.1 (Forge, NeoForge, Fabric or Quilt).
+2. Fabric needs [Fabric API](https://modrinth.com/mod/fabric-api). Quilt 1.20.1 needs [QFAPI](https://modrinth.com/mod/qsl). QFAPI has no 1.21.1 release, so on Quilt 1.21.1 use the normal Fabric API instead.
+3. Put the jar that matches your Minecraft version and loader in your `mods` folder. On NeoForge 1.21.1 use the NeoForge jar, on NeoForge 1.20.1 use the Forge jar.
 4. Start the game, open a world and type `@claude hello` in chat.
 
 Players who join your world do not need the mod. Only the side that hosts the world needs it.
@@ -137,21 +141,37 @@ Minecraft chat ──► mod ──► claude -p (your Claude Code, your memory)
 
 ## Building
 
-The loader builds are separate Gradle projects that share `common/`.
+Every Minecraft version and loader is its own small Gradle project. They all compile the same shared code with Mojang mappings.
 
 ```
 ./build.sh
 ```
 
-`build.sh` defaults to the Java runtimes that Prism Launcher downloads. Override them with `JDK17=/path/to/jdk17 JDK25=/path/to/jdk25 ./build.sh`. Forge needs a JDK 17 to run its Gradle, Fabric Loom needs a JDK 25. Both jars target Java 17. Jars and `SHA256SUMS.txt` end up in `dist/`.
+`build.sh` builds all five jars and defaults to the Java runtimes that Prism Launcher downloads. Override them with `JDK17=/path JDK21=/path JDK25=/path ./build.sh`. You need a JDK 17 (ForgeGradle 6), a JDK 21 (ForgeGradle 7 and ModDevGradle) and a JDK 25 (Fabric Loom 1.19 and the ForgeGradle 7 Mavenizer). The 1.20.1 jars target Java 17, the 1.21.1 jars target Java 21. Jars and `SHA256SUMS.txt` end up in `dist/`.
 
 | Folder | What |
 |---|---|
-| `common/` | Everything shared, plain Minecraft code with Mojang mappings |
-| `forge/` | Forge entry point (also used by NeoForge 1.20.1), ForgeGradle 6 |
-| `fabric/` | Fabric entry point (also used by Quilt), Fabric Loom 1.19 |
+| `common/` | Code shared by every version and loader (chat, sessions, MCP bridge, prompt, config) |
+| `1.20.1/common/` | Game tools for 1.20.1 |
+| `1.20.1/forge/` | Forge entry point, also used by NeoForge 1.20.1, ForgeGradle 6 |
+| `1.20.1/fabric/` | Fabric entry point, also used by Quilt, Fabric Loom 1.19 |
+| `1.21.1/common/` | Game tools for 1.21.1 (data components, holders, recipe holders) |
+| `1.21.1/forge/` | Forge entry point, ForgeGradle 7 |
+| `1.21.1/neoforge/` | NeoForge entry point, ModDevGradle 2 |
+| `1.21.1/fabric/` | Fabric entry point, also used by Quilt, Fabric Loom 1.19 |
 
 ## Tested
+
+Version 1.1.0 was started on a real dedicated server for each loader, and a test client joined, chatted and had Claude use its tools.
+
+| Minecraft | Loader |
+|---|---|
+| 1.21.1 | Forge 52.1.21 |
+| 1.21.1 | NeoForge 21.1.267 (every tool checked, including commands, effects, enchantments, chest contents and recipes) |
+| 1.21.1 | Fabric Loader 0.20.1 with Fabric API 0.116.18 |
+| 1.21.1 | Quilt Loader 0.30.2 with Fabric API 0.116.18 |
+| 1.20.1 | Forge 47.4.29 |
+| 1.20.1 | Fabric Loader 0.20.1 with Fabric API 0.92.12 |
 
 Version 1.0.0 was started on a real dedicated server for each loader. On Forge 47.4.28, NeoForge 47.1.106 and Fabric Loader 0.20.1 (Fabric API 0.92.12), a test client joined, chatted and had Claude use its tools. On Quilt Loader 0.30.2 (QFAPI 7.7.0), Claude was tested through the server console. Earlier Forge only builds also ran on Forge 47.4.10 and in singleplayer in All the Mods 9 Expert.
 

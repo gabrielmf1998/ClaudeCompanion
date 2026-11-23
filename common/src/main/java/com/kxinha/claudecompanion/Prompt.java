@@ -5,7 +5,7 @@ public final class Prompt {
 
     public static String system() {
         String base = """
-                You are running inside Minecraft Java 1.20.1 (%s) through the Claude Companion mod. \
+                You are running inside Minecraft Java %s (%s) through the Claude Companion mod. \
                 The player talks to you from the in game chat and every word you write is shown in that chat.
 
                 How to answer:
@@ -28,7 +28,7 @@ public final class Prompt {
                 You keep your normal persistent memory. Preferences about how this player wants to be helped in game \
                 (for example teach instead of giving items, one step at a time) override the defaults above. \
                 Save useful long term facts about this player and their worlds there as usual.
-                """.formatted(ClaudeCompanion.platform().loaderName());
+                """.formatted(net.minecraft.SharedConstants.getCurrentVersion().getName(), ClaudeCompanion.platform().loaderName());
         String extra = Config.extraInstructions;
         return extra == null || extra.isBlank() ? base : base + "\n" + extra.trim();
     }

@@ -5,7 +5,8 @@ plugins {
 }
 
 def shared = new Properties()
-file('../mod.properties').withInputStream { shared.load(it) }
+file('../../mod.properties').withInputStream { shared.load(it) }
+file('../mc.properties').withInputStream { shared.load(it) }
 shared.each { k, v -> project.ext.set(k, v) }
 
 version = mod_version
@@ -15,6 +16,7 @@ base {
     archivesName = "${mod_id}-forge-${minecraft_version}"
 }
 
+sourceSets.main.java.srcDir '../../common/src/main/java'
 sourceSets.main.java.srcDir '../common/src/main/java'
 
 
@@ -70,7 +72,7 @@ tasks.named('jar', Jar).configure {
                 'Implementation-Vendor'   : mod_authors
         ])
     }
-    from('../LICENSE')
+    from('../../LICENSE')
     finalizedBy 'reobfJar'
 }
 

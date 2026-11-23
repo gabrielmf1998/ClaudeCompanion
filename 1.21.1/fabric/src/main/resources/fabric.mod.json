@@ -1,0 +1,23 @@
+{
+	"schemaVersion": 1,
+	"id": "claudecompanion",
+	"version": "${version}",
+	"name": "Claude Companion",
+	"description": "${description}",
+	"authors": ["Kxinha"],
+	"contact": {
+		"sources": "https://github.com/gabrielmf1998/ClaudeCompanion",
+		"issues": "https://github.com/gabrielmf1998/ClaudeCompanion/issues"
+	},
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"main": ["com.kxinha.claudecompanion.fabric.ClaudeCompanionFabric"]
+	},
+	"depends": {
+		"fabricloader": ">=0.15.11",
+		"minecraft": "~${minecraft_version}",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
